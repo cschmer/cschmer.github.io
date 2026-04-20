@@ -236,3 +236,34 @@ html { scroll-padding-top: 64px; }
   font-family: var(--font-sans);
   font-size: 13px;
 }
+
+/* ---------- CV ---------- */
+.cv-line { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.cv-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 16px;
+}
+.cv-icon { color: var(--maroon); }
+.cv-updated { font-size: 12px; }
+
+/* ---------- Teaching ---------- */
+.teaching-list { list-style: none; padding: 0; margin: 0; }
+.course {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--nav-border);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.course:last-child { border-bottom: 0; }
+.course__title { font-weight: 700; font-size: 15px; }
+.course__meta {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
