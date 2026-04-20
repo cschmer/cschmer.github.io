@@ -267,3 +267,6 @@ html { scroll-padding-top: 64px; }
   text-transform: uppercase;
   color: var(--muted);
 }
+
+/* ---------- Contact ---------- */
+.contact__email { font-size: 17px; font-weight: 600; margin-bottom: 0; }
