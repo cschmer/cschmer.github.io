@@ -195,3 +195,44 @@ html { scroll-padding-top: 64px; }
   .hero__photo img { width: 120px; height: 120px; }
   .hero__name { font-size: 36px; }
 }
+
+/* ---------- About ---------- */
+.about__interests { margin-top: 14px; color: var(--muted); font-size: 14px; }
+.about__interests-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--maroon);
+}
+
+/* ---------- Research ---------- */
+.paper { margin-bottom: 28px; }
+.paper:last-child { margin-bottom: 0; }
+
+.paper__title {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.paper__meta {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.paper__abstract {
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+.paper__links {
+  font-family: var(--font-sans);
+  font-size: 13px;
+}
