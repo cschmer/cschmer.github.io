@@ -725,6 +725,8 @@ git commit -m "feat: add CV and teaching sections with placeholders"
 - Modify: `index.html`
 - Modify: `style.css`
 
+User confirmed during Task 1: **email only, no mailing address.**
+
 - [ ] **Step 1: Fill in the `<section id="contact">` block in `index.html`**
 
 Replace the `<!-- contact filled in Task 9 -->` comment with:
@@ -734,15 +736,7 @@ Replace the `<!-- contact filled in Task 9 -->` comment with:
       <p class="contact__email">
         <a href="mailto:chad.schmerling@chicagobooth.edu">chad.schmerling@chicagobooth.edu</a>
       </p>
-      <address class="contact__address">
-        University of Chicago<br>
-        Booth School of Business<br>
-        5807 S. Woodlawn Avenue<br>
-        Chicago, IL 60637
-      </address>
 ```
-
-If Task 1 recorded a different mailing address, use that instead of the Booth block above.
 
 - [ ] **Step 2: Append contact styles to `style.css`**
 
@@ -750,20 +744,13 @@ Append to `style.css`:
 
 ```css
 /* ---------- Contact ---------- */
-.contact__email { font-size: 17px; font-weight: 600; margin-bottom: 14px; }
-.contact__address {
-  font-style: normal;
-  font-family: var(--font-sans);
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.5;
-}
+.contact__email { font-size: 17px; font-weight: 600; margin-bottom: 0; }
 ```
 
 - [ ] **Step 3: Preview and verify**
 
 Reload the page.
-Expected: "CONTACT" label, then the email as a maroon underlined link (click it — your mail client should open a draft to `chad.schmerling@chicagobooth.edu`), then the four-line mailing address in a smaller muted sans-serif block.
+Expected: "CONTACT" label, then the email as a maroon underlined link (click it — your mail client should open a draft to `chad.schmerling@chicagobooth.edu`). Nothing else in the section.
 
 - [ ] **Step 4: Commit**
 
