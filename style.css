@@ -86,3 +86,61 @@ section { margin: 56px 0; }
   z-index: 1000;
   text-decoration: none;
 }
+
+/* ---------- Sticky top navigation ---------- */
+.site-nav {
+  position: sticky;
+  top: 0;
+  background: var(--paper);
+  border-bottom: 1px solid var(--nav-border);
+  z-index: 10;
+}
+
+.site-nav__inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 14px var(--gutter);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.site-nav__brand {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: -0.3px;
+}
+
+.site-nav__links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.site-nav__links a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.site-nav__links a:hover {
+  color: var(--maroon);
+}
+
+@media (max-width: 560px) {
+  .site-nav__inner { padding: 10px var(--gutter); }
+  .site-nav__brand { font-size: 15px; }
+  .site-nav__links { gap: 12px; font-size: 12px; }
+}
+
+/* Scroll padding so anchor jumps don't hide behind sticky nav */
+html { scroll-padding-top: 64px; }
