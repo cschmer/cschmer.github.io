@@ -87,14 +87,13 @@ The page is one document. A sticky top navigation bar links to each section by i
 
 ### 4.7 Contact
 - Email: `chad.schmerling@chicagobooth.edu` rendered as a `mailto:` link
-- Mailing address block:
+- Mailing address block (default — Booth, inferred from the `@chicagobooth.edu` email; user will confirm or amend during implementation):
   ```
   University of Chicago
   Booth School of Business
   5807 S. Woodlawn Avenue
   Chicago, IL 60637
   ```
-  (Confirm exact affiliation with user before committing; if Chad is in the Economics department rather than Booth, swap accordingly. The Booth email suggests Booth affiliation.)
 
 ### 4.8 Footer
 - Single line, small muted text
@@ -183,11 +182,11 @@ The site is considered ready to launch when:
 5. The site is accessible: semantic HTML (`<main>`, `<nav>`, `<section>`, `<h1>`/`<h2>`/`<h3>` hierarchy), alt text on the headshot, sufficient color contrast for `--muted` on `--paper` (check against WCAG AA).
 6. Deployed to `chadschmerling.github.io` and publicly reachable.
 
-## 9. Open items for implementation phase
+## 9. Decisions carried into the implementation plan
 
-These are not blockers for writing the implementation plan; they are noted so the plan addresses them explicitly.
+The following small decisions are made here so the implementation plan does not have to relitigate them:
 
-- Whether to include `robots.txt` or `sitemap.xml` for v1 (low effort, marginal SEO benefit — recommend yes).
-- Whether the favicon should be a monogram "CS" SVG or a simple maroon square. Design calls for the monogram; implementer confirms during build.
-- Whether to include Open Graph / Twitter Card meta tags for when the page URL is shared. Recommend yes — low effort, meaningful preview when posted.
-- Confirmation from user on Booth vs Economics department affiliation before the mailing address is written in.
+- **Include `robots.txt` and `sitemap.xml`** — low effort, marginal SEO benefit; both shipped in v1.
+- **Favicon** — monogram "CS" SVG in maroon on the `--paper` background. No raster fallback needed; SVG favicons are supported in all modern browsers.
+- **Open Graph and Twitter Card meta tags** — included in `<head>` for v1. Use the headshot as the preview image.
+- **Mailing address default** — Booth (see §4.7). Implementer asks user to confirm before merging.
