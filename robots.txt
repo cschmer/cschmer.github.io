@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://chadschmerling.github.io/sitemap.xml
+Sitemap: https://cschmer.github.io/sitemap.xml

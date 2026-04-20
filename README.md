@@ -1,8 +1,8 @@
-# chadschmerling.github.io
+# cschmer.github.io
 
 Source for my personal academic homepage.
 
-**Live:** https://chadschmerling.github.io/
+**Live:** https://cschmer.github.io/
 **Custom domain (planned):** https://chadschmerling.com/
 
 ## Local preview
