@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" role="img" aria-label="Placeholder headshot">
+  <rect width="180" height="180" fill="#e7e5e4"/>
+  <circle cx="90" cy="72" r="32" fill="#a8a29e"/>
+  <path d="M30,180 C30,130 60,110 90,110 C120,110 150,130 150,180 Z" fill="#a8a29e"/>
+  <text x="90" y="170" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="11" fill="#57534e">placeholder</text>
+</svg>
