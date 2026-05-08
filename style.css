@@ -238,25 +238,42 @@ html { scroll-padding-top: 64px; }
   font-size: 13px;
 }
 
-/* ---------- Teaching ---------- */
-.teaching-list { list-style: none; padding: 0; margin: 0; }
-.course {
+/* ---------- Education / Teaching (shared list pattern) ---------- */
+.teaching-list,
+.degree-list { list-style: none; padding: 0; margin: 0; }
+
+.institution {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.course,
+.degree {
   padding: 14px 0;
   border-bottom: 1px solid var(--nav-border);
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
-.course:last-child { border-bottom: 0; }
-.course__title { font-weight: 700; font-size: 15px; }
-.course__meta {
+.course:last-child,
+.degree:last-child { border-bottom: 0; }
+
+.course__title,
+.degree__title { font-weight: 700; font-size: 15px; }
+
+.course__meta,
+.degree__meta {
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--muted);
 }
-.course__desc { margin-top: 6px; font-size: 15px; line-height: 1.55; }
+
+.course__desc,
+.degree__desc { margin-top: 6px; font-size: 15px; line-height: 1.55; }
 
 /* ---------- Contact ---------- */
 .contact__email { font-size: 17px; font-weight: 600; margin-bottom: 0; }
