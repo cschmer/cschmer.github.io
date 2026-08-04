@@ -180,13 +180,12 @@
 
       var html = '<table class="rank-table"><thead><tr>' +
         '<th class="num">Rank</th><th>Ticker</th><th>Company</th>' +
-        '<th class="num">PERMNO</th><th class="num">Score</th><th class="num">Pctile</th>' +
+        '<th class="num">Score</th><th class="num">Pctile</th>' +
         '</tr></thead><tbody>';
       per.rows.forEach(function (r) {
         html += '<tr><td class="num">' + r[0] + '</td>' +
           '<td class="tick">' + (r[1] ? esc(r[1]) : '<span class="muted">&mdash;</span>') + '</td>' +
           '<td><a href="#s/' + r[3] + '">' + esc(r[2]) + '</a></td>' +
-          '<td class="num">' + r[3] + '</td>' +
           '<td class="num">' + r[4].toFixed(2) + '</td>' +
           '<td class="num">' + r[5].toFixed(4) + '</td></tr>';
       });
