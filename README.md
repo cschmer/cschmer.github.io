@@ -15,8 +15,14 @@ python3 -m http.server 8000
 ## Structure
 
 - `index.html` — single-page site (all content)
-- `style.css` — all styles
+- `style.css` — all styles (including the Data section)
 - `assets/` — photo, CV, favicon, OG image
+- `data/` — Data section: landing page + meme-stock lists explorer
+  (`data/meme-stocks/` — static JSON chunks in `idx/`, `d/`, `p/`, generated;
+  do not edit by hand)
+- `meme_stocks_website_lists/` — original 24 CSVs + README (served as downloads)
+- `scripts/build_meme_stock_data.py` — regenerates `data/meme-stocks/` JSON
+  from the CSVs (`python3 scripts/build_meme_stock_data.py`)
 - `robots.txt`, `sitemap.xml` — SEO basics
 
 ## Editing content

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Methodology &amp; Downloads — Meme-Stock Lists — Chad Schmerling</title>
+  <meta name="description" content="How the retro meme-stock lists are built: model families, features, state vs. entry labels, caveats, and CSV downloads.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+  <meta name="theme-color" content="#6b1e1e">
+  <link rel="canonical" href="https://cschmer.github.io/data/meme-stocks/methodology.html">
+  <link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<a class="skip-link" href="#top">Skip to content</a>
+  <nav class="site-nav" aria-label="Primary">
+    <div class="site-nav__inner">
+      <a class="site-nav__brand" href="../../">Chad Schmerling</a>
+      <ul class="site-nav__links">
+        <li><a href="../../">Home</a></li>
+        <li><a href="../">Data</a></li>
+        <li><a href="./">Explorer</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="top">
+    <section aria-labelledby="method-h">
+      <h2 id="method-h" class="section-label">Data &middot; Methodology</h2>
+      <h1 class="data-title">Retro meme-stock lists: how they are built</h1>
+      <p>Top-25 ranked &ldquo;meme stock&rdquo; lists per period, produced by the retro
+        meme-stock identification pipeline behind
+        <a href="../../index.html#research">&ldquo;A Century of Meme Stocks and the Price of
+        Coordination&rdquo;</a>. The classifier is trained on the post-2020 meme era
+        (SEC N-PORT holdings of meme-themed funds, biweekly reconstitutions,
+        2021-01&nbsp;&rarr;&nbsp;2023-06) using <strong>only market-based features</strong>
+        (no text, no social media), then applied backward through history. Each model
+        family uses only the data that existed as of its break year, so the lists answer:
+        <em>which stocks would a meme-stock fund have held, had it existed then, judging
+        purely from market behavior?</em></p>
+      <p>All features enter the scorer as within-period cross-sectional percentile ranks
+        (missing&nbsp;&rarr;&nbsp;0.5); stocks missing more than 40% of a family&rsquo;s
+        features are dropped from that period&rsquo;s universe. The scorer is an
+        L1-penalized logistic regression fit on the 2021-01&nbsp;&rarr;&nbsp;2023-06
+        training window; the coefficient vectors are frozen and applied unchanged to
+        every period.</p>
+    </section>
+
+    <section aria-labelledby="labels-h">
+      <h2 id="labels-h" class="section-label">State vs. Entry</h2>
+      <dl class="degree__details">
+        <dt>State</dt>
+        <dd>Score for <em>being</em> a meme stock over the upcoming period (trained on
+          fund membership during period <em>k</em>, features from the snapshot before
+          <em>k</em>). The standing meme list.</dd>
+        <dt>Entry</dt>
+        <dd>Score for <em>becoming</em> a meme stock (trained only on prior non-members;
+          label = joins the fund in period <em>k</em>). Ranks stocks by resemblance to a
+          fresh meme-cohort entrant &mdash; useful for spotting new episodes rather than
+          persistent membership.</dd>
+      </dl>
+      <p>Both are strictly predictive: every feature is computed before the period it
+        scores, with realistic reporting lags (fundamentals +4 months, 13F +2 months,
+        short interest +8 business days, FTD +15 calendar days, Form&nbsp;4 +3 calendar
+        days).</p>
+    </section>
+
+    <section aria-labelledby="families-h">
+      <h2 id="families-h" class="section-label">Model Families</h2>
+      <p>Each family is one similarity mapping trained on the same modern labels,
+        restricted to the feature families whose data existed at its break year. Later
+        families see richer data but start later.</p>
+      <div class="table-scroll">
+        <table class="rank-table">
+          <thead><tr><th>Family</th><th>Break year</th><th>Coverage</th><th>New data at break</th></tr></thead>
+          <tbody>
+            <tr><td class="tick">M1926</td><td class="num">1926</td><td>1926-02 &rarr; 2025-12</td><td>CRSP daily price/volume</td></tr>
+            <tr><td class="tick">M1950</td><td class="num">1950</td><td>1950-01 &rarr; 2025-12</td><td>Compustat fundamentals</td></tr>
+            <tr><td class="tick">M1976</td><td class="num">1976</td><td>1976-01 &rarr; 2025-12</td><td>IBES analyst estimates</td></tr>
+            <tr><td class="tick">M1996</td><td class="num">1996</td><td>1996-01 &rarr; 2025-12</td><td>OptionMetrics option chain</td></tr>
+            <tr><td class="tick">M2010</td><td class="num">2010</td><td>2010-01 &rarr; 2025-12</td><td>BJZZ retail order flow</td></tr>
+            <tr><td class="tick">Mmax</td><td class="num">&mdash;</td><td>1926-02 &rarr; 2025-08</td><td>composite: richest family per era, stitched</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>Mmax</strong> is not a separate model: it hands off across eras &mdash;
+        M1926 for 1926&ndash;1949, M1950 for 1950&ndash;1975, M1976 for 1976&ndash;1995,
+        M1996 for 1996&ndash;2009, M2010 for 2010&ndash;2025-08 &mdash; and its
+        <code>source_tier</code> column records the handoff (shown as
+        &ldquo;source&rdquo; in the explorer). It ends 2025-08 (OptionMetrics vintage
+        frontier); per-family files run through 2025-12, with option/borrow features
+        absent after their source data ends, handled by the standard missing-data rule.</p>
+
+      <details class="feature-details">
+        <summary>Features by family (full list)</summary>
+        <dl class="degree__details">
+          <dt>F2 &mdash; all families</dt>
+          <dd>Returns / price dynamics (CRSP daily): momentum 1/3/6/12m; realized vol 1/3m;
+            vol-of-vol 12m; skewness and kurtosis; max/min/p95 daily returns (lottery-ness);
+            dollar volume level &amp; spike; turnover level &amp; spike; 12m drawdown;
+            36m market correlation; share price level; listing age.</dd>
+          <dt>F6a &mdash; M1950+</dt>
+          <dd>Annual fundamentals (Compustat): negative net income, ROA, leverage,
+            cash/assets, book-to-market.</dd>
+          <dt>F6b &mdash; M1976+</dt>
+          <dd>Analyst coverage (IBES): number of EPS estimates, estimate dispersion; full
+            version (M1996+) adds mean recommendation and consensus-target implied upside.</dd>
+          <dt>F5a &mdash; M1996+</dt>
+          <dd>Institutional ownership (13F): breadth, breadth change, institutional share.</dd>
+          <dt>F5b &mdash; M1996+</dt>
+          <dd>Insider transactions (Form 4): net selling, 6-month transaction count.</dd>
+          <dt>F1 &mdash; M1996+</dt>
+          <dd>Options surface &amp; flow (OptionMetrics): 30d ATM IV, 25-delta skew, term
+            slope, IV spike, option relative spread, chain breadth, OTM-call share,
+            option volume level/spike, call / OTM-call / short-dated volume shares,
+            volume-to-open-interest, option-to-stock dollar volume.</dd>
+          <dt>F3a &mdash; M2010</dt>
+          <dd>Short interest: SI% of shares, days-to-cover, 3-month change.</dd>
+          <dt>F3b &mdash; M2010</dt>
+          <dd>Short-side stress (Markit borrow, SEC FTD, Reg SHO): borrow fee &amp; spike,
+            utilization &amp; change, max borrow-cost bucket, shares on loan,
+            fails-to-deliver level/persistence, Reg SHO threshold days.</dd>
+          <dt>F4a &mdash; M2010</dt>
+          <dd>Retail order flow (BJZZ sub-penny): retail share of volume, retail
+            imbalance &amp; change, retail trade size, off-exchange (TRF) share,
+            retail-share spike.</dd>
+        </dl>
+      </details>
+    </section>
+
+    <section aria-labelledby="howto-h">
+      <h2 id="howto-h" class="section-label">How to Read the Lists</h2>
+      <ul>
+        <li><strong>The list at a point in time:</strong> one period&rsquo;s 25 rows, in rank order &mdash; what the <a href="./">explorer</a> shows.</li>
+        <li><strong>A stock&rsquo;s history:</strong> filter by <code>permno</code> (not ticker) across periods; <code>pctile</code> is the comparable time-series quantity.</li>
+        <li><strong>Comparing families:</strong> same period, same label, different family = what each data era&rsquo;s information set says. Divergence between M1926 and M2010 on the same date shows what richer data adds.</li>
+        <li><strong>Weekly vs. monthly:</strong> weekly uses trailing trading-day windows ending at the last trading day of each week; monthly uses month-end snapshots. Same frozen coefficients, so they agree closely but not exactly.</li>
+        <li><strong>Headline series:</strong> <code>Mmax_state_*</code> is the canonical best-available list per period; per-family files are for ladder/robustness views.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="caveats-h" id="caveats">
+      <h2 id="caveats-h" class="section-label">Caveats</h2>
+      <div class="data-notice">
+        <ul>
+          <li>Raw <code>score</code> is <strong>not comparable across periods or families</strong>; ranks and percentiles are the portable quantities.</li>
+          <li>Universe: US common stocks in CRSP (optionable-equity oriented in the modern era). <strong>NYSE only before 1962</strong>; AMEX joins 1962, NASDAQ 1972 &mdash; early universes are small (the explorer shows <code>n_universe</code> for every period).</li>
+          <li><strong>1926&ndash;1949 output is suggestive, not a headline claim</strong>: it carries the largest concept-transfer stretch &mdash; 2020s meme behavior mapped onto a pre-options, pre-retail-broker market.</li>
+          <li>Top-25 is the paper&rsquo;s list convention, <strong>not a hard threshold</strong>; the cutoff at rank 25 is arbitrary.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section aria-labelledby="downloads-h">
+      <h2 id="downloads-h" class="section-label">Downloads</h2>
+      <p>The original CSVs, exactly as produced by the pipeline (25 rows per period, sorted
+        by period then rank). Columns: <code>ym</code>/<code>week</code>, <code>rank</code>,
+        <code>ticker</code>, <code>company</code>, <code>permno</code>, <code>score</code>,
+        <code>pctile</code>, <code>n_universe</code>, plus <code>source_tier</code> on the
+        Mmax files. Full column documentation in the
+        <a href="../../meme_stocks_website_lists/README.md" download>data README</a>.</p>
+      <div class="table-scroll">
+        <table class="rank-table" id="dl-table">
+          <thead><tr><th>Family</th><th>List</th><th>Cadence</th><th>Coverage</th><th class="num">Periods</th><th class="num">Size</th><th>File</th></tr></thead>
+          <tbody><tr><td colspan="7" class="muted">Loading&hellip;</td></tr></tbody>
+        </table>
+      </div>
+      <p class="muted sans data-finenote">Provenance: built by
+        <code>scratchpad/website_lists_build.py</code> (data repo) from the streams of
+        record; weekly per-family lists are scored with the identical recipe and frozen
+        coefficients, extended to each family&rsquo;s full span.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <span>&copy; 2026 Chad Schmerling</span>
+      <span class="muted">Research output, not investment advice. Nothing here is a
+        recommendation to buy or sell any security.</span>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    fetch('manifest.json').then(function (r) { return r.json(); }).then(function (m) {
+      var fmt = function (p) {
+        return p.length === 6 ? p.slice(0, 4) + '-' + p.slice(4) : p;
+      };
+      document.querySelector('#dl-table tbody').innerHTML =
+        m.datasets.map(function (d) {
+          return '<tr><td class="tick">' + d.family + '</td><td>' + d.label +
+            '</td><td>' + d.cadence + '</td><td>' + fmt(d.first) + ' → ' + fmt(d.last) +
+            '</td><td class="num">' + d.n_periods.toLocaleString('en-US') +
+            '</td><td class="num">' + (d.csv_bytes / 1048576).toFixed(1) + ' MB</td>' +
+            '<td><a href="../../meme_stocks_website_lists/' + d.csv + '" download>CSV</a></td></tr>';
+        }).join('');
+    });
+  })();
+  </script>
+</body>
+</html>

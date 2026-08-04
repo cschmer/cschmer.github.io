@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Meme-Stock Lists (1926–2025) — Chad Schmerling</title>
+  <meta name="description" content="Browsable top-25 retro meme-stock lists, 1926–2025, from market data alone. Companion data to 'A Century of Meme Stocks and the Price of Coordination'.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+  <meta name="theme-color" content="#6b1e1e">
+  <link rel="canonical" href="https://cschmer.github.io/data/meme-stocks/">
+  <link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<a class="skip-link" href="#top">Skip to content</a>
+  <nav class="site-nav" aria-label="Primary">
+    <div class="site-nav__inner">
+      <a class="site-nav__brand" href="../../">Chad Schmerling</a>
+      <ul class="site-nav__links">
+        <li><a href="../../">Home</a></li>
+        <li><a href="../">Data</a></li>
+        <li><a href="methodology.html">Methodology &amp; Downloads</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="top">
+    <section aria-labelledby="explorer-h">
+      <h2 id="explorer-h" class="section-label">Data &middot; Meme-Stock Lists</h2>
+      <h1 class="data-title">A century of meme stocks, top 25 at a time</h1>
+      <p class="data-intro">Monthly and weekly top-25 &ldquo;meme stock&rdquo; rankings,
+        1926&ndash;2025, from a classifier trained on the post-2020 meme era using market
+        data alone &mdash; no social media, no text &mdash; then applied backward through
+        history. Each model family uses only data available from its break year;
+        <strong>Mmax</strong> stitches the richest family per era.
+        See <a href="methodology.html">methodology, caveats, and CSV downloads</a>.</p>
+
+      <div class="data-controls sans" role="group" aria-label="Dataset selection">
+        <label class="ctl">
+          <span class="ctl__label">Model family</span>
+          <select id="family" aria-label="Model family"></select>
+        </label>
+        <fieldset class="ctl ctl--seg">
+          <legend class="ctl__label">List</legend>
+          <label><input type="radio" name="label" value="state" checked> State <span class="muted">(is a meme stock)</span></label>
+          <label><input type="radio" name="label" value="entry"> Entry <span class="muted">(about to become one)</span></label>
+        </fieldset>
+        <fieldset class="ctl ctl--seg">
+          <legend class="ctl__label">Cadence</legend>
+          <label><input type="radio" name="cadence" value="monthly" checked> Monthly</label>
+          <label><input type="radio" name="cadence" value="weekly"> Weekly</label>
+        </fieldset>
+      </div>
+
+      <div class="data-controls sans" role="group" aria-label="Period selection">
+        <button id="prev" class="nav-btn" type="button" aria-label="Previous period">&larr; Prev</button>
+        <label class="ctl"><span class="ctl__label">Year</span><select id="year" aria-label="Year"></select></label>
+        <label class="ctl"><span class="ctl__label">Period</span><select id="period" aria-label="Period"></select></label>
+        <button id="next" class="nav-btn" type="button" aria-label="Next period">Next &rarr;</button>
+        <input id="slider" class="period-slider" type="range" min="0" max="1" value="1" aria-label="Scrub through periods">
+      </div>
+
+      <p id="meta" class="data-meta sans"></p>
+      <div id="notice"></div>
+      <div id="table-wrap" class="table-scroll"><p class="muted">Loading&hellip;</p></div>
+      <p class="data-finenote sans muted">Raw <em>score</em> is comparable only within a single
+        period &mdash; use rank or percentile across time. Top-25 is the paper&rsquo;s list
+        convention, not a hard threshold. <a href="methodology.html#caveats">All caveats</a>.</p>
+    </section>
+
+    <section aria-labelledby="lookup-h">
+      <h2 id="lookup-h" class="section-label">Stock Lookup</h2>
+      <p>Search a ticker or company to see every top-25 appearance across all lists.
+        Securities are identified by CRSP <strong>PERMNO</strong>, not ticker &mdash;
+        tickers are reused across history (GME belonged to General Motors in the 1980s, GameStop today).</p>
+      <div id="search-wrap" class="search-wrap sans">
+        <input id="search" type="search" placeholder="Ticker or company, e.g. GME or GameStop"
+               autocomplete="off" aria-label="Search ticker or company">
+        <ul id="search-results" class="search-results" hidden></ul>
+      </div>
+      <div id="stock-view" class="stock-view" hidden></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <span>&copy; 2026 Chad Schmerling</span>
+      <span class="muted">Research output, not investment advice. Nothing here is a
+        recommendation to buy or sell any security.</span>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
