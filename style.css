@@ -420,6 +420,7 @@ html { scroll-padding-top: 64px; }
 .rank-table .num { text-align: right; font-variant-numeric: tabular-nums; }
 .rank-table th.num { text-align: right; }
 .rank-table .tick { font-weight: 700; letter-spacing: 0.3px; }
+.rank-table .nowrap { white-space: nowrap; }
 
 .data-finenote { font-size: 12px; margin-top: 10px; }
 
@@ -511,4 +512,122 @@ code {
 }
 @media (max-width: 560px) {
   .site-footer__inner { flex-direction: column; gap: 4px; }
+}
+
+/* ---------- Trend Slope and Strength explorer (/data/trend-slope-strength/) ---------- */
+.ts-chart { position: relative; margin: 8px 0 6px; min-height: 120px; }
+.ts-svg { display: block; max-width: 100%; font-family: var(--font-sans); }
+.ts-svg [hidden] { display: none; }
+.ts-grid { stroke: rgba(28, 25, 23, 0.08); stroke-width: 1; }
+.ts-axis { stroke: rgba(28, 25, 23, 0.35); stroke-width: 1; }
+.ts-ref { stroke: rgba(28, 25, 23, 0.45); stroke-width: 1; }
+.ts-band { fill: rgba(28, 25, 23, 0.06); }
+.ts-tick { font-size: 11px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.ts-ref-label { fill: var(--muted); }
+.ts-panel-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  fill: var(--muted);
+}
+.ts-line { stroke-linejoin: round; stroke-linecap: round; }
+.ts-endlabel { font-size: 11px; font-weight: 600; }
+.ts-crosshair { stroke: rgba(28, 25, 23, 0.4); stroke-width: 1; }
+.ts-dot { stroke: var(--paper); stroke-width: 2; }
+.ts-hit { cursor: crosshair; }
+.ts-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  padding: 6px 9px;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: nowrap;
+  z-index: 5;
+}
+.ts-tip-date { font-weight: 700; margin-bottom: 2px; }
+.ts-tooltip b { font-variant-numeric: tabular-nums; font-weight: 600; }
+.ts-sw {
+  display: inline-block;
+  width: 12px;
+  height: 3px;
+  vertical-align: middle;
+  margin-right: 4px;
+  border-radius: 2px;
+}
+.ts-sw--dash { height: 0; border-top: 3px dashed; background: none; }
+.ts-legend label { white-space: nowrap; }
+.ctl--wide { flex: 1 1 100%; min-width: 0; }
+.ts-checks { display: flex; flex-wrap: wrap; gap: 4px 0; }
+.ts-checks--cols { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 3px 12px; }
+.ts-checks label { margin-right: 12px; white-space: nowrap; }
+.ts-legend-extra { font-size: 13px; margin: 0 0 4px; display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.ts-legend-item { white-space: nowrap; }
+.ts-x {
+  font: inherit;
+  font-weight: 700;
+  color: var(--muted);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 0 4px;
+}
+.ts-x:hover { color: var(--maroon); }
+
+.heat-table {
+  border-collapse: separate;
+  border-spacing: 2px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  width: 100%;
+  margin-top: 4px;
+}
+.heat-table th {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 4px 6px;
+  text-align: center;
+  vertical-align: bottom;
+}
+.heat-table th[scope=row] { text-align: right; vertical-align: middle; white-space: nowrap; }
+.heat-corner { text-align: left !important; }
+.heat-axis { letter-spacing: 0.5px; text-transform: none; font-weight: 600; }
+.heat-sub {
+  display: block;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  text-transform: none;
+  color: var(--muted);
+}
+.heat-cell {
+  position: relative;
+  text-align: center;
+  padding: 12px 4px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  outline-offset: -2px;
+}
+.heat-cell:hover, .heat-cell:focus { outline: 2px solid var(--ink); }
+.heat-long, .heat-short { box-shadow: inset 0 0 0 2px var(--ink); }
+.heat-selected { box-shadow: inset 0 0 0 2px var(--maroon); }
+.heat-role {
+  position: absolute;
+  left: 4px;
+  top: 2px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+@media (max-width: 560px) {
+  .heat-cell { padding: 10px 2px; font-size: 12px; }
+  .heat-sub, .heat-role { display: none; }
 }

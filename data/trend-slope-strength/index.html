@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trend Slope and Strength (1963–2025) — Chad Schmerling</title>
+  <meta name="description" content="Interactive portfolio returns from 'Trend Slope and Strength' (Schmerling and Yeon): the TS factor in four specifications, the 5×5 double-sort grid, rolling FF6 alphas, and benchmark spreads, 1963–2025.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+  <meta name="theme-color" content="#6b1e1e">
+  <link rel="canonical" href="https://cschmer.github.io/data/trend-slope-strength/">
+  <link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<a class="skip-link" href="#top">Skip to content</a>
+  <nav class="site-nav" aria-label="Primary">
+    <div class="site-nav__inner">
+      <a class="site-nav__brand" href="../../">Chad Schmerling</a>
+      <ul class="site-nav__links">
+        <li><a href="../../">Home</a></li>
+        <li><a href="../">Data</a></li>
+        <li><a href="methodology.html">Methodology &amp; Downloads</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="top">
+    <section aria-labelledby="explorer-h">
+      <h2 id="explorer-h" class="section-label">Data &middot; Trend Slope and Strength</h2>
+      <h1 class="data-title">Smooth uptrends, noisy downtrends, and the TS factor</h1>
+      <p class="data-intro">Portfolio returns behind <em>Trend Slope and Strength</em>
+        (Schmerling and Yeon). Each stock&rsquo;s one-year price chart is regressed on time;
+        the R<sup>2</sup> is <strong>trend strength</strong> and the coefficient is
+        <strong>trend slope</strong>. Stocks are sorted into R<sup>2</sup> quintiles first
+        and slope quintiles within, held for 21 trading days. The <strong>TS factor</strong>
+        is long the smoothest uptrends (RQ5/SQ5) and short the noisiest downtrends
+        (RQ1/SQ1). Four specifications: full CRSP universe or the largest 500 stocks,
+        equal or value weighted, July 1963 to December 2025.
+        See <a href="methodology.html">protocol, conventions, and CSV downloads</a>.</p>
+
+      <div class="data-controls sans" role="group" aria-label="Specification">
+        <fieldset class="ctl ctl--seg">
+          <legend class="ctl__label">Specification</legend>
+          <label><input type="radio" name="spec" value="full_vw" checked> Full VW</label>
+          <label><input type="radio" name="spec" value="full_ew"> Full EW</label>
+          <label><input type="radio" name="spec" value="top500_vw"> Top-500 VW</label>
+          <label><input type="radio" name="spec" value="top500_ew"> Top-500 EW</label>
+        </fieldset>
+      </div>
+      <p class="data-meta sans muted">The specification drives the heat map, rolling alpha,
+        and summary table below. Full = CRSP common stocks priced at $5 or more; top-500 =
+        largest 500 by market cap at formation; VW = value weight, EW = equal weight.</p>
+    </section>
+
+    <section aria-labelledby="cum-h">
+      <h2 id="cum-h" class="section-label">Growth of $1, log scale</h2>
+      <p>Monthly compounded returns to the self-financing TS spread, starting from $1 in
+        June 1963. Toggle specifications to compare, add index benchmarks or the
+        paper&rsquo;s horse-race spreads as overlays, or click a cell in the heat map to
+        plot a long-only portfolio.</p>
+      <div class="data-controls sans ts-legend" role="group" aria-label="Series shown">
+        <fieldset class="ctl ctl--seg">
+          <legend class="ctl__label">TS factor</legend>
+          <label><input type="checkbox" name="show" value="full_vw" checked> <span class="ts-sw" style="background:#b8322e"></span> Full VW</label>
+          <label><input type="checkbox" name="show" value="full_ew"> <span class="ts-sw" style="background:#2a78d6"></span> Full EW</label>
+          <label><input type="checkbox" name="show" value="top500_vw"> <span class="ts-sw" style="background:#199e70"></span> Top-500 VW</label>
+          <label><input type="checkbox" name="show" value="top500_ew"> <span class="ts-sw" style="background:#c98500"></span> Top-500 EW</label>
+        </fieldset>
+        <fieldset class="ctl ctl--seg">
+          <legend class="ctl__label">Index benchmarks</legend>
+          <div id="overlay-index" class="ts-checks"></div>
+        </fieldset>
+      </div>
+      <div class="data-controls sans ts-legend" role="group" aria-label="Benchmark spreads">
+        <fieldset class="ctl ctl--seg">
+          <legend class="ctl__label">Spread weighting</legend>
+          <label><input type="radio" name="ow" value="vw" checked> VW</label>
+          <label><input type="radio" name="ow" value="ew"> EW</label>
+        </fieldset>
+        <fieldset class="ctl ctl--seg ctl--wide">
+          <legend class="ctl__label">Signal spreads, D10&minus;D1, chart window</legend>
+          <div id="overlay-signals" class="ts-checks ts-checks--cols"></div>
+        </fieldset>
+      </div>
+      <div id="cum-extra" class="ts-legend-extra sans"></div>
+      <div id="cum-chart" class="ts-chart"><p class="muted">Loading&hellip;</p></div>
+      <details class="feature-details">
+        <summary>Show as table (year-end values)</summary>
+        <div id="cum-table" class="table-scroll"></div>
+      </details>
+      <p class="data-finenote sans muted">Index benchmarks are long-only: S&amp;P 500
+        constituents (CRSP), and NASDAQ-listed common stocks priced at $5 or more; VW
+        weights by prior-day market cap, EW rebalances to equal weights monthly. Signal
+        spreads are decile-10-minus-decile-1 portfolios on the full universe, every
+        signal formed on the paper&rsquo;s chart window [t&minus;252,&nbsp;t], from July
+        1967. Equal-weighted NASDAQ is dominated by small stocks and is not investable at
+        scale. All series are gross of transaction costs.</p>
+    </section>
+
+    <section aria-labelledby="heat-h">
+      <h2 id="heat-h" class="section-label">The 5&times;5 double sort</h2>
+      <p>Columns are trend-strength quintiles (RQ1 noisiest to RQ5 smoothest); rows are
+        slope quintiles within each column (SQ5 steepest up on top, SQ1 steepest down at
+        the bottom). Full-sample statistics for each cell; the TS spread is the top-right
+        cell minus the bottom-left.</p>
+      <div class="data-controls sans" role="group" aria-label="Statistic">
+        <fieldset class="ctl ctl--seg">
+          <legend class="ctl__label">Statistic</legend>
+          <label><input type="radio" name="stat" value="alpha" checked> FF6 alpha</label>
+          <label><input type="radio" name="stat" value="t"> t-stat</label>
+          <label><input type="radio" name="stat" value="sharpe"> Sharpe</label>
+          <label><input type="radio" name="stat" value="ret"> Ann. return</label>
+        </fieldset>
+      </div>
+      <div id="heat-wrap" class="table-scroll"><p class="muted">Loading&hellip;</p></div>
+      <p id="heat-spread" class="data-meta sans"></p>
+      <p id="heat-detail" class="data-finenote sans"></p>
+      <p class="data-finenote sans muted">Cell alphas are intercepts on returns in excess of
+        the one-month T-bill; the TS spread is self-financing, so its alpha is the intercept
+        on the raw spread. FF6 = Fama&ndash;French five factors plus momentum, daily data,
+        Newey&ndash;West standard errors with 21 lags.</p>
+    </section>
+
+    <section aria-labelledby="roll-h">
+      <h2 id="roll-h" class="section-label">Rolling 60-month FF6 alpha</h2>
+      <p>At each month-end, the TS spread is regressed on the six factors over the trailing
+        60 months of daily returns. The upper panel is the annualized alpha; the lower panel
+        is its t-statistic, with the &plusmn;1.96 band shaded.</p>
+      <div id="roll-chart" class="ts-chart"><p class="muted">Loading&hellip;</p></div>
+      <p id="roll-note" class="data-finenote sans muted"></p>
+      <details class="feature-details">
+        <summary>Show as table (year-end values)</summary>
+        <div id="roll-table" class="table-scroll"></div>
+      </details>
+    </section>
+
+    <section aria-labelledby="summary-h">
+      <h2 id="summary-h" class="section-label">Summary statistics</h2>
+      <div id="summary-wrap" class="table-scroll"><p class="muted">Loading&hellip;</p></div>
+      <p id="summary-check" class="data-finenote sans muted"></p>
+      <p class="data-finenote sans muted">Annualized return is the daily mean times 252;
+        volatility is the daily standard deviation times &radic;252; Sharpe is their ratio.
+        Max drawdown is on the daily cumulative index. Leg alphas are in excess of the
+        T-bill; the spread alpha is on the raw spread.
+        <a href="methodology.html#conventions">All conventions</a>.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <span>&copy; 2026 Chad Schmerling</span>
+      <span class="muted">Research output, not investment advice. Nothing here is a
+        recommendation to buy or sell any security.</span>
+    </div>
+  </footer>
+
+  <script src="app.js?v=3"></script>
+</body>
+</html>

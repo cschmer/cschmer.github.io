@@ -8,7 +8,7 @@
   </url>
   <url>
     <loc>https://cschmer.github.io/data/</loc>
-    <lastmod>2026-08-04</lastmod>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -21,6 +21,18 @@
   <url>
     <loc>https://cschmer.github.io/data/meme-stocks/methodology.html</loc>
     <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://cschmer.github.io/data/trend-slope-strength/</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cschmer.github.io/data/trend-slope-strength/methodology.html</loc>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

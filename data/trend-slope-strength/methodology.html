@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Methodology &amp; Downloads — Trend Slope and Strength — Chad Schmerling</title>
+  <meta name="description" content="How the Trend Slope and Strength portfolio series are built: universe, formation window, conditional 5×5 sort, FF6 conventions, file-by-file data dictionary, and CSV downloads.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+  <meta name="theme-color" content="#6b1e1e">
+  <link rel="canonical" href="https://cschmer.github.io/data/trend-slope-strength/methodology.html">
+  <link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<a class="skip-link" href="#top">Skip to content</a>
+  <nav class="site-nav" aria-label="Primary">
+    <div class="site-nav__inner">
+      <a class="site-nav__brand" href="../../">Chad Schmerling</a>
+      <ul class="site-nav__links">
+        <li><a href="../../">Home</a></li>
+        <li><a href="../">Data</a></li>
+        <li><a href="./">Explorer</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="top">
+    <section aria-labelledby="method-h">
+      <h2 id="method-h" class="section-label">Data &middot; Methodology</h2>
+      <h1 class="data-title">Trend Slope and Strength: how the series are built</h1>
+      <p>Portfolio return series and sort diagnostics from
+        <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6731259" target="_blank" rel="noopener">&ldquo;Trend
+        Slope and Strength&rdquo;</a> (Chad Schmerling, Chicago Booth, and Kingsley Yeon,
+        University of Chicago). The paper decomposes a stock&rsquo;s price chart into two
+        numbers from one regression of cumulative return on time: the R<sup>2</sup> is
+        <strong>trend strength</strong> and the coefficient is <strong>trend slope</strong>.
+        Sorting on strength first and slope within produces the TS factor, long smooth
+        uptrends and short noisy downtrends. Every series here is generated from the
+        paper-baseline result files by the same code that produces the paper&rsquo;s tables;
+        nothing is edited by hand.</p>
+    </section>
+
+    <section aria-labelledby="protocol-h">
+      <h2 id="protocol-h" class="section-label">Protocol</h2>
+      <p>One protocol sits behind every series on this page.</p>
+      <div class="table-scroll">
+        <table class="rank-table">
+          <thead><tr><th>Parameter</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td class="tick">Universe</td><td>CRSP common stock (share codes 10, 11) on NYSE, AMEX, and NASDAQ, price at or above $5</td></tr>
+            <tr><td class="tick">Sample</td><td>July 1963 to December 2025 (formation dates); benchmark spreads start July 1967</td></tr>
+            <tr><td class="tick">Formation window</td><td>[t&minus;252, t] trading days, the &ldquo;chart window&rdquo;, with no skip month</td></tr>
+            <tr><td class="tick">History filter</td><td>At least 80% of formation-window days observed</td></tr>
+            <tr><td class="tick">Signal</td><td>OLS of cumulative return on time: unsigned R<sup>2</sup> (trend strength) and slope (trend slope)</td></tr>
+            <tr><td class="tick">Sort</td><td>Conditional 5&times;5: R<sup>2</sup> quintiles first (RQ1 low to RQ5 high), slope quintiles within each (SQ1 steepest down to SQ5 steepest up)</td></tr>
+            <tr><td class="tick">Holding</td><td>21 trading days, rebalanced monthly, overlapping cohorts averaged</td></tr>
+            <tr><td class="tick">Weighting</td><td>EW = equal weight; VW = value weight by market cap at formation</td></tr>
+            <tr><td class="tick">Top 500</td><td>Largest 500 stocks by market cap at each formation date</td></tr>
+            <tr><td class="tick">TS factor</td><td>RQ5/SQ5 minus RQ1/SQ1: long smooth uptrends, short noisy downtrends</td></tr>
+            <tr><td class="tick">Factor model</td><td>Fama&ndash;French five factors plus Carhart momentum (FF6), Newey&ndash;West HAC with 21 lags on daily data</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="conventions-h" id="conventions">
+      <h2 id="conventions-h" class="section-label">Conventions</h2>
+      <ul>
+        <li><strong>Units.</strong> All returns are simple returns in decimal units (0.01 = 1%), gross of transaction costs, inclusive of dividends and delisting returns.</li>
+        <li><strong>Frequency.</strong> Daily files have one row per trading day. Monthly files compound the daily returns within each calendar month and are stamped with the calendar month-end date.</li>
+        <li><strong>Alphas.</strong> Long-only portfolio alphas are intercepts on returns in excess of the one-month T-bill. Long-short spreads are self-financing, so spread alphas are intercepts on the raw spread. The <code>excess_of_rf_in_regression</code> column in <code>summary_stats.csv</code> records which convention applies to each row.</li>
+        <li><strong>Annualization.</strong> Annualized return is the daily mean times 252; volatility is the daily standard deviation times &radic;252; alphas are annualized percentages.</li>
+        <li><strong>Spread identity.</strong> On daily returns, <code>RQ5_SQ5 &minus; RQ1_SQ1</code> in a portfolio file reproduces the matching TS series to numerical precision. The identity does not survive monthly compounding of each leg separately, which is why the explorer&rsquo;s cumulative chart compounds the spread itself.</li>
+        <li><strong>Benchmark formation.</strong> The explorer&rsquo;s signal spreads use the paper&rsquo;s chart window, [t&minus;252, t], matching its horse-race table. The download set also carries a skip-21 variant, [t&minus;252, t&minus;21], the momentum literature&rsquo;s skip-month convention, in which short-term reversal (prior-month return) is also defined.</li>
+        <li><strong>Index benchmarks.</strong> <code>index_benchmarks_{daily,monthly}.csv</code> hold long-only S&amp;P 500 and NASDAQ returns in equal- and value-weighted form, built from CRSP with the same return conventions. S&amp;P 500 membership comes from CRSP&rsquo;s constituent list (<code>dsp500list</code>); the NASDAQ universe is NASDAQ-listed common stocks (share codes 10, 11) with prior-day price at or above $5, the paper&rsquo;s price filter, and starts January 1973 when CRSP&rsquo;s NASDAQ coverage begins. VW weights by prior-day market capitalization daily; EW sets equal weights on the first trading day of each month over the stocks that qualify that day and holds them within the month, which avoids the bid-ask-bounce bias of daily-rebalanced equal weighting. Equal-weighted NASDAQ is dominated by small stocks and is far above the value-weighted index; treat it as a diagnostic, not an investable benchmark.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="files-h">
+      <h2 id="files-h" class="section-label">Files</h2>
+      <dl class="degree__details">
+        <dt>Headline series</dt>
+        <dd><code>ts_factor_{daily,monthly}.csv</code> carry the TS factor in four specifications
+          (<code>ts_full_ew</code>, <code>ts_full_vw</code>, <code>ts_top500_ew</code>,
+          <code>ts_top500_vw</code>). <code>portfolios25_{full,top500}_{ew,vw}_{daily,monthly}.csv</code>
+          carry all 25 conditional double-sort cells, <code>RQ1_SQ1</code> through <code>RQ5_SQ5</code>.
+          <code>rolling_ff6_alpha_60m.csv</code> is the trailing 60-month daily FF6 regression at each
+          month-end for the four TS series (annualized alpha, t-statistic, momentum and market betas);
+          the first estimate is January 1968. <code>summary_stats.csv</code> gives full-sample
+          statistics for every published series, including each of the 100 cells
+          (<code>RQ{i}_SQ{j}_{universe}_{weighting}</code>).</dd>
+        <dt>Benchmark spreads</dt>
+        <dd><code>benchmark_spreads_{ew,vw}_{chartwindow,skip21}_{daily,monthly}.csv</code>: decile-10
+          minus decile-1 spreads on the full universe for the R<sup>2</sup> family and standard
+          momentum-family signals, each built with the same sorting machinery. Columns:
+          <code>R2</code> (unsigned R<sup>2</sup>), <code>SignedR2</code>, <code>TSlope</code>
+          (t-statistic of the slope, a monotone transform of signed R<sup>2</sup>, so its deciles
+          coincide with <code>SignedR2</code>), <code>Slope</code>, <code>Mom12m</code>,
+          <code>Mom6m</code>, <code>IntMom</code> (months 7&ndash;12), <code>STreversal</code>,
+          <code>LRreversal</code> (months 13&ndash;60), <code>MRreversal</code> (months 13&ndash;36),
+          <code>High52</code>, <code>MomVol</code>, <code>IndMom</code>, <code>ResidualMom</code>, and
+          <code>TrendFactor</code> (Han, Zhou and Zhu 2016). These are the paper&rsquo;s own
+          implementations; see its horse-race section before treating them as canonical versions
+          of the published factors.</dd>
+        <dt>Index benchmarks</dt>
+        <dd><code>index_benchmarks_{daily,monthly}.csv</code>: <code>sp500_ew</code>,
+          <code>sp500_vw</code>, <code>nasdaq_ew</code>, <code>nasdaq_vw</code>, long-only index
+          returns built as described under Conventions. NASDAQ columns are empty before
+          January 1973.</dd>
+        <dt>Factor-level strategies</dt>
+        <dd><code>factor_level_ts_{daily,monthly}.csv</code> apply the TS logic to a 17-factor
+          universe (FF6 plus eleven horse-race spreads) in the spirit of Ehsani and Linnainmaa
+          (2022): at each month-end each factor&rsquo;s own cumulative return is regressed on
+          time. <code>factor_TS</code> is long factors with positive slope and above-median
+          R<sup>2</sup>, short factors with negative slope and above-median R<sup>2</sup>;
+          <code>factor_PRET</code> is the plain factor-momentum baseline; <code>factor_R2</code>
+          sorts on R<sup>2</sup> alone. Starts March 1969.</dd>
+        <dt>Sort diagnostics</dt>
+        <dd>For replication without CRSP access. <code>breakpoints_monthly.csv</code> has one row
+          per formation date and universe: the number of stocks with a valid signal, the lower
+          edges of R<sup>2</sup> quintiles 2 to 5, and the lower edges of slope quintiles 2 to 5
+          inside each R<sup>2</sup> quintile (slope in cumulative-return units per trading day;
+          0.001 is roughly 25% per year). <code>cell_stats_monthly.csv</code> has one row per
+          formation date, universe, and cell: stock count, mean R<sup>2</sup>, mean and median
+          slope, and mean and median market cap in millions of dollars.</dd>
+      </dl>
+    </section>
+
+    <section aria-labelledby="notincluded-h">
+      <h2 id="notincluded-h" class="section-label">What is deliberately not here</h2>
+      <div class="data-notice">
+        <p>No stock-level data. Permno-level R<sup>2</sup>, slope, and quintile assignments are
+          derived directly from licensed CRSP daily returns and are not redistributed. The
+          breakpoints and cell statistics above are the aggregate substitutes: with your own CRSP
+          access they let you reproduce the sort exactly. The TAQ retail-flow panel used in the
+          paper&rsquo;s mechanism section is likewise licensed and not included.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="checks-h">
+      <h2 id="checks-h" class="section-label">Reproduction checks</h2>
+      <p>The exported series reproduce the paper&rsquo;s headline numbers. The explorer recomputes
+        this check from <code>summary_stats.csv</code> when you switch specification.</p>
+      <div class="table-scroll">
+        <table class="rank-table">
+          <thead><tr><th>Series</th><th class="num">Ann. return</th><th class="num">Sharpe</th><th class="num">FF6 alpha</th><th class="num">t</th></tr></thead>
+          <tbody>
+            <tr><td class="tick">TS full VW</td><td class="num">17.9%</td><td class="num">0.78</td><td class="num">10.4%</td><td class="num">4.65</td></tr>
+            <tr><td class="tick">TS full EW</td><td class="num">13.4%</td><td class="num">0.89</td><td class="num">6.9%</td><td class="num">5.08</td></tr>
+            <tr><td class="tick">TS top-500 EW</td><td class="num">14.4%</td><td class="num">0.63</td><td class="num">7.4%</td><td class="num">3.53</td></tr>
+            <tr><td class="tick">TS top-500 VW</td><td class="num">14.4%</td><td class="num">0.58</td><td class="num">7.3%</td><td class="num">2.94</td></tr>
+            <tr><td class="tick">Unsigned R<sup>2</sup> D10&minus;D1, EW, chart window</td><td class="num">8.8%</td><td class="num">1.03</td><td class="num">6.9%</td><td class="num">5.43</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="downloads-h" id="downloads">
+      <h2 id="downloads-h" class="section-label">Downloads</h2>
+      <p>The CSVs exactly as produced by the pipeline. Column definitions for every file are in the
+        <a href="../../trend_slope_strength_data/README.md" download>data README</a>.
+        Daily files are 0.5 to 4.7 MB; monthly files are under 250 KB.</p>
+      <div class="table-scroll">
+        <table class="rank-table" id="dl-table">
+          <thead><tr><th>Group</th><th>File</th><th>Description</th><th class="num">Size</th></tr></thead>
+          <tbody><tr><td colspan="4" class="muted">Loading&hellip;</td></tr></tbody>
+        </table>
+      </div>
+      <p class="muted sans data-finenote">Provenance: generated by <code>gen_website_data.py</code>
+        in the LinSlope research repo from the paper-baseline result files; the index benchmarks by
+        <code>gen_website_index_benchmarks.py</code> in the same repo from the CRSP daily panel. The
+        explorer&rsquo;s JSON is derived from these CSVs by <code>scripts/build_ts_data.py</code> in
+        the site repo.</p>
+    </section>
+
+    <section aria-labelledby="cite-h">
+      <h2 id="cite-h" class="section-label">Citation</h2>
+      <p>Schmerling, Chad, and Kingsley Yeon. &ldquo;Trend Slope and Strength.&rdquo; Working
+        paper, University of Chicago, 2026.
+        <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6731259" target="_blank" rel="noopener">SSRN</a>.</p>
+      <p class="muted">Research output, not investment advice. Nothing here is a recommendation to
+        buy or sell any security.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <span>&copy; 2026 Chad Schmerling</span>
+      <span class="muted">Research output, not investment advice. Nothing here is a
+        recommendation to buy or sell any security.</span>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    fetch('manifest.json').then(function (r) { return r.json(); }).then(function (m) {
+      var esc = function (s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
+      var size = function (b) { return b >= 1048576 ? (b / 1048576).toFixed(1) + ' MB' : Math.round(b / 1024) + ' KB'; };
+      var last = null;
+      document.querySelector('#dl-table tbody').innerHTML =
+        m.files.map(function (f) {
+          var group = f.group === last ? '' : esc(f.group);
+          last = f.group;
+          return '<tr><td class="tick">' + group + '</td>' +
+            '<td><a href="../../trend_slope_strength_data/' + esc(f.name) + '" download>' + esc(f.name) + '</a></td>' +
+            '<td>' + esc(f.desc) + '</td><td class="num">' + size(f.bytes) + '</td></tr>';
+        }).join('');
+    });
+  })();
+  </script>
+</body>
+</html>
