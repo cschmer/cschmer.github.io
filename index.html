@@ -34,7 +34,7 @@
         <li><a href="#about">About</a></li>
         <li><a href="#education">Education</a></li>
         <li><a href="#research">Research</a></li>
-        <li><a href="data/">Data</a></li>
+        <li><a href="#data">Data</a></li>
         <li><a href="#teaching">Teaching</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
@@ -108,6 +108,41 @@
         <p class="paper__meta">Working Paper</p>
         <p class="paper__abstract">Retail investors meet a stock through its price chart. I decompose the chart into trend slope and trend strength&mdash;the R<sup>2</sup> of cumulative returns regressed on time&mdash;and sort on strength first, direction within. The resulting TS factor, long smooth uptrends and short noisy downtrends, earns 7.9% annualized six-factor alpha (t = 3.44) in value-weighted CRSP, 1962&ndash;2025, and survives spanning by momentum and five related signals. A model of short-sale-constrained chart traders delivers the factor&rsquo;s asymmetric structure and five confirmed predictions. Retail order flow concentrates in smooth uptrends at formation and rises with trend strength; institutions tilt away, and analyst price targets fall with trend strength&mdash;the belief channel is retail-specific. Smooth uptrends barely react to earnings news confirming their trend and then reverse, and the premium concentrates in the first six months after formation, with long-horizon estimates pointing to reversal&mdash;the horizon structure extrapolation requires.</p>
         <p class="paper__links"><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6731259" target="_blank" rel="noopener">SSRN</a></p>
+      </article>
+    </section>
+
+    <section id="data" aria-labelledby="data-h">
+      <h2 id="data-h" class="section-label">Data</h2>
+      <p>Public datasets from my research, browsable online and downloadable as CSV.</p>
+
+      <article class="paper">
+        <h3 class="paper__title"><a href="data/meme-stocks/">Retro Meme-Stock Lists, 1926&ndash;2025</a></h3>
+        <p class="paper__meta">Companion data &middot; &ldquo;A Century of Meme Stocks and the Price of Coordination&rdquo;</p>
+        <p class="paper__abstract">Monthly and weekly top-25 &ldquo;meme stock&rdquo;
+          rankings back to 1926, from a classifier trained on the post-2020 meme era
+          using market data alone (returns, options, short interest, retail flow &mdash;
+          no social media, no text) and applied backward through history. Six model
+          families, each restricted to the data available from its break year; browse
+          any period, or look up a stock&rsquo;s every appearance.</p>
+        <p class="paper__links">
+          <a href="data/meme-stocks/">Explore the lists</a> &middot;
+          <a href="data/meme-stocks/methodology.html">Methodology &amp; downloads</a>
+        </p>
+      </article>
+
+      <article class="paper">
+        <h3 class="paper__title"><a href="data/trend-slope-strength/">Trend Slope and Strength: Portfolio Returns, 1963&ndash;2025</a></h3>
+        <p class="paper__meta">Companion data &middot; &ldquo;Trend Slope and Strength&rdquo; (with Kingsley Yeon)</p>
+        <p class="paper__abstract">Daily and monthly returns to the TS factor &mdash; long
+          smooth uptrends, short noisy downtrends &mdash; in four specifications, all 25
+          cells of the conditional R<sup>2</sup>-then-slope double sort, rolling 60-month
+          FF6 alphas, and decile spreads for fourteen benchmark signals built with the same
+          machinery. Sort breakpoints and per-cell statistics are included so the sort can
+          be reproduced with your own CRSP access; no stock-level data are redistributed.</p>
+        <p class="paper__links">
+          <a href="data/trend-slope-strength/">Explore the series</a> &middot;
+          <a href="data/trend-slope-strength/methodology.html">Methodology &amp; downloads</a>
+        </p>
       </article>
     </section>
 
